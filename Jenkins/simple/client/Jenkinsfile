@@ -1,0 +1,30 @@
+pipeline {
+  agent any
+    
+  environment {
+     CI = 'false'
+  }
+
+  stages {
+    
+    stage('install dependencies') {
+        steps {
+            bat 'cd client/ && npm install'
+        }
+    }
+    
+    stage('create react build') {
+        steps {
+            bat 'cd client/ && npm run build'
+        }
+    }
+    
+    stage('serve the build') {
+        steps {
+            bat 'cd client/ && npm install -g serve'
+            bat 'cd client/ && serve -l 5000 -s build'
+        }
+    }
+    
+  }
+}

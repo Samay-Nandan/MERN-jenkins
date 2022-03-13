@@ -1,0 +1,37 @@
+pipeline {
+  agent any
+    
+  environment {
+     CI = 'false'
+  }
+
+  stages {
+    
+    stage('creating docker image') {
+        steps {
+            bat 'cd client/ && docker build -f Dockerfile -t samaynandan/mern-jenkins-client .'
+            bat 'cd backend/ && docker build -f Dockerfile -t samaynandan/mern-jenkins-backend .'
+        }
+    }
+    
+    stage('pushing docker image') {
+        steps {
+            bat 'docker push samaynandan/mern-jenkins-client'
+            bat 'docker push samaynandan/mern-jenkins-backend'
+        }
+    }
+
+    stage('pulling latest image') {
+        steps {
+            bat 'docker pull samaynandan/mern-jenkins-client'
+            bat 'docker pull samaynandan/mern-jenkins-backend'
+        }
+    }
+
+    stage('running docker images') {
+        steps {
+            bat 'docker-compose up -d'
+        }
+    }
+  }
+}

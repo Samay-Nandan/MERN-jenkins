@@ -1,0 +1,23 @@
+pipeline {
+  agent any
+    
+  environment {
+     CI = 'false'
+  }
+
+  stages {
+    
+    stage('install dependencies') {
+        steps {
+            bat 'cd backend/ && npm install'
+        }
+    }
+    
+    stage('starting backend') {
+        steps {
+            bat 'cd backend/ && npm run start'
+        }
+    }
+    
+  }
+}
